@@ -246,9 +246,9 @@
     background: var(--accent, var(--blue));
   }
 
-  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); font-weight: 500; margin-bottom: 8px; }
-  .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--dark); line-height: 1; }
-  .stat-sub { font-size: 11px; color: var(--gray); margin-top: 6px; }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); font-weight: 500; margin-bottom: 10px; }
+  .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--dark); line-height: 1.25; padding-top: 4px; padding-bottom: 4px; display: block; }
+  .stat-sub { font-size: 11px; color: var(--gray); margin-top: 8px; }
   .stat-trend { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; margin-top: 4px; }
   .stat-trend.up { color: var(--green); }
   .stat-trend.down { color: var(--red); }
@@ -594,33 +594,33 @@
 
   <div class="sidebar-nav">
     <span class="nav-section-label">Overview</span>
-    <button class="nav-item active" onclick="showPage('dashboard', this)">
+    <button class="nav-item active" data-page="dashboard">
       <span class="nav-icon">▦</span> Dashboard
     </button>
 
     <span class="nav-section-label">Pipeline</span>
-    <button class="nav-item" onclick="showPage('pipeline', this)">
+    <button class="nav-item" data-page="pipeline">
       <span class="nav-icon">⟶</span> Prospect Pipeline
       <span class="nav-badge">12</span>
     </button>
-    <button class="nav-item" onclick="showPage('intake', this)">
+    <button class="nav-item" data-page="intake">
       <span class="nav-icon">＋</span> New Prospect Intake
     </button>
 
     <span class="nav-section-label">Materials</span>
-    <button class="nav-item" onclick="showPage('materials', this)">
+    <button class="nav-item" data-page="materials">
       <span class="nav-icon">◫</span> Material Library
     </button>
-    <button class="nav-item" onclick="showPage('builder', this)">
+    <button class="nav-item" data-page="builder">
       <span class="nav-icon">⬡</span> Quick Build
     </button>
 
     <span class="nav-section-label">Operations</span>
-    <button class="nav-item" onclick="showPage('followups', this)">
+    <button class="nav-item" data-page="followups">
       <span class="nav-icon">◎</span> Follow-Up Queue
       <span class="nav-badge" style="background:var(--red)">3</span>
     </button>
-    <button class="nav-item" onclick="showPage('ads', this)">
+    <button class="nav-item" data-page="ads">
       <span class="nav-icon">◈</span> Ad Targeting
     </button>
   </div>
@@ -644,7 +644,7 @@
       <p id="page-sub">Good morning, Dani — here's your pipeline at a glance</p>
     </div>
     <div class="topbar-right">
-      <button class="btn btn-ghost" onclick="showPage('intake', document.querySelector('[onclick*=intake]'))">＋ Add Prospect</button>
+      <button class="btn btn-ghost" onclick="showPage('intake')">＋ Add Prospect</button>
       <button class="btn btn-primary" onclick="openModal('send-modal')">⚡ Quick Send Material</button>
     </div>
   </header>
@@ -678,7 +678,7 @@
 
       <div class="pipeline-header">
         <h2>Pipeline Overview</h2>
-        <button class="btn btn-ghost" onclick="showPage('pipeline', document.querySelector('[onclick*=pipeline]'))">View Full Pipeline →</button>
+        <button class="btn btn-ghost" onclick="showPage('pipeline')">View Full Pipeline →</button>
       </div>
 
       <div class="pipeline-board">
@@ -1451,13 +1451,26 @@
   };
 
   function showPage(id, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var target = document.getElementById('page-' + id);
+    if (target) target.classList.add('active');
     if (btn) btn.classList.add('active');
-    document.getElementById('page-title').textContent = pages[id].title;
-    document.getElementById('page-sub').textContent = pages[id].sub;
+    var titleEl = document.getElementById('page-title');
+    var subEl = document.getElementById('page-sub');
+    if (titleEl && pages[id]) titleEl.textContent = pages[id].title;
+    if (subEl && pages[id]) subEl.textContent = pages[id].sub;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  // Robust nav: attach listeners to all data-page buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.nav-item[data-page]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showPage(this.getAttribute('data-page'), this);
+      });
+    });
+  });
 
   function openModal(id) {
     document.getElementById(id).classList.add('show');
