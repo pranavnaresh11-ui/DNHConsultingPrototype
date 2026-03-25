@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNH Consulting — Client Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0F3F7;
+    --dark: #1C2128;
+    --mid: #3D4A5C;
+    --gray: #8A96A3;
+    --light: #E2E8F0;
+    --blue: #4A90C4;
+    --blue-light: #A8C8E8;
+    --blue-pale: #EBF3FA;
+    --white: #FFFFFF;
+    --green: #2ECC8A;
+    --amber: #F5A623;
+    --red: #E05A5A;
+    --card: #FFFFFF;
+    --border: #D8E2EC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 240px;
+    height: 100vh;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    padding: 0 0 24px;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .logo-box {
+    display: inline-flex;
+    flex-direction: column;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    padding: 6px 10px 4px;
+    margin-bottom: 6px;
+  }
+
+  .logo-box .logo-main {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .logo-box .logo-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .sidebar-tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav-section-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    padding: 12px 12px 6px;
+    margin-top: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: rgba(255,255,255,0.55);
+    font-size: 13.5px;
+    font-weight: 400;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .nav-item.active { background: rgba(74,144,196,0.18); color: var(--blue-light); font-weight: 500; }
+  .nav-item .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--blue);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 20px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+
+  .user-info .user-name { font-size: 12px; font-weight: 500; color: var(--white); }
+  .user-info .user-role { font-size: 10px; color: rgba(255,255,255,0.35); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 240px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .topbar-left p { font-size: 12px; color: var(--gray); margin-top: 1px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #3A7AB0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(74,144,196,0.3); }
+  .btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--bg); }
+
+  /* ── CONTENT ── */
+  .content { padding: 32px 36px; flex: 1; }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── STAT CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--blue));
+  }
+
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); font-weight: 500; margin-bottom: 8px; }
+  .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--dark); line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--gray); margin-top: 6px; }
+  .stat-trend { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; margin-top: 4px; }
+  .stat-trend.up { color: var(--green); }
+  .stat-trend.down { color: var(--red); }
+
+  /* ── PIPELINE BOARD ── */
+  .pipeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .pipeline-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .pipeline-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .pipeline-col {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .col-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .col-title { font-size: 12px; font-weight: 600; color: var(--mid); text-transform: uppercase; letter-spacing: 0.5px; }
+  .col-count { font-size: 11px; font-weight: 600; color: var(--white); background: var(--col-color, var(--gray)); padding: 2px 8px; border-radius: 20px; }
+
+  .prospect-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .prospect-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); border-color: var(--blue-light); }
+
+  .prospect-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 10px 0 0 10px;
+    background: var(--card-accent, var(--border));
+  }
+
+  .card-company { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+  .card-contact { font-size: 11px; color: var(--gray); margin-bottom: 8px; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; }
+  .card-industry { font-size: 10px; background: var(--blue-pale); color: var(--blue); padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  .card-days { font-size: 10px; color: var(--gray); }
+  .card-urgent { color: var(--red) !important; font-weight: 600; }
+
+  /* ── TWO COL LAYOUT ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-head {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-head h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--dark); }
+  .card-head p { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .card-body { padding: 18px 22px; }
+
+  /* ── ACTIVITY FEED ── */
+  .activity-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--dot-color, var(--blue));
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .activity-text { font-size: 12.5px; color: var(--mid); line-height: 1.5; }
+  .activity-text strong { color: var(--dark); font-weight: 500; }
+  .activity-time { font-size: 10px; color: var(--gray); margin-top: 2px; }
+
+  /* ── MATERIALS PAGE ── */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .material-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .material-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); border-color: var(--blue-light); }
+
+  .material-icon { font-size: 28px; margin-bottom: 12px; }
+  .material-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .material-desc { font-size: 11.5px; color: var(--gray); line-height: 1.5; margin-bottom: 14px; }
+  .material-status { display: flex; align-items: center; justify-content: space-between; }
+  .status-pill { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .status-ready { background: #E6F9F2; color: #1A9E6A; }
+  .status-draft { background: #FFF4E6; color: #C07A10; }
+  .status-building { background: var(--blue-pale); color: var(--blue); }
+  .material-actions { display: flex; gap: 6px; }
+  .mini-btn { font-size: 11px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--mid); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .mini-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+  .mini-btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
+  .mini-btn.primary:hover { background: #3A7AB0; }
+
+  /* ── INTAKE FORM ── */
+  .form-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .form-hero {
+    background: var(--dark);
+    padding: 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(74,144,196,0.15);
+  }
+
+  .form-hero h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white; margin-bottom: 6px; position: relative; }
+  .form-hero p { font-size: 13px; color: rgba(255,255,255,0.55); position: relative; }
+
+  .form-body { padding: 28px 36px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label { font-size: 12px; font-weight: 500; color: var(--mid); letter-spacing: 0.3px; }
+
+  input, select, textarea {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--dark);
+    background: var(--bg);
+    transition: all 0.2s;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(74,144,196,0.1);
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+  .checkbox-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--mid);
+    transition: all 0.15s;
+    background: var(--bg);
+  }
+
+  .checkbox-pill:hover { border-color: var(--blue); color: var(--blue); }
+  .checkbox-pill input { display: none; }
+  .checkbox-pill.checked { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); font-weight: 500; }
+
+  .form-footer {
+    padding: 20px 36px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+
+  .form-note { font-size: 12px; color: var(--gray); }
+
+  /* ── SUCCESS STATE ── */
+  .success-banner {
+    display: none;
+    background: #E6F9F2;
+    border: 1px solid #A3E4C9;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .success-banner.show { display: flex; animation: fadeIn 0.3s ease; }
+  .success-icon { font-size: 20px; }
+  .success-text { font-size: 13px; color: #1A9E6A; font-weight: 500; }
+
+  /* ── TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray); font-weight: 600; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); background: var(--bg); }
+  .data-table td { font-size: 13px; padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--mid); vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--blue-pale); }
+  .data-table td strong { color: var(--dark); font-weight: 500; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--blue); transition: width 0.5s ease; }
+
+  /* ── NOTIFICATION DOT ── */
+  .notif-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; margin-left: 4px; vertical-align: middle; }
+
+  /* ── PAGE TITLES ── */
+  .page-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+  .page-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
+  .empty-state .empty-icon { font-size: 36px; margin-bottom: 10px; }
+  .empty-state p { font-size: 13px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(28,33,40,0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 520px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+  .modal-header { padding: 22px 26px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-header h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--dark); }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray); line-height: 1; padding: 2px 6px; border-radius: 4px; }
+  .modal-close:hover { background: var(--bg); color: var(--dark); }
+  .modal-body { padding: 22px 26px; }
+  .modal-footer { padding: 16px 26px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); border-radius: 0 0 16px 16px; }
+
+  /* ── TOOLTIP-STYLE INFO ── */
+  .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .info-label { color: var(--gray); }
+  .info-row .info-val { color: var(--dark); font-weight: 500; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--bg); padding: 4px; border-radius: 10px; width: fit-content; border: 1px solid var(--border); }
+  .tab { padding: 8px 18px; border-radius: 7px; font-size: 13px; cursor: pointer; color: var(--gray); font-weight: 400; border: none; background: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .tab.active { background: var(--white); color: var(--dark); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-box">
+      <span class="logo-main">DNH</span>
+      <span class="logo-sub">Consulting</span>
+    </div>
+    <p class="sidebar-tagline">Client Follow-Up Portal</p>
+  </div>
+
+  <div class="sidebar-nav">
+    <span class="nav-section-label">Overview</span>
+    <button class="nav-item active" onclick="showPage('dashboard', this)">
+      <span class="nav-icon">▦</span> Dashboard
+    </button>
+
+    <span class="nav-section-label">Pipeline</span>
+    <button class="nav-item" onclick="showPage('pipeline', this)">
+      <span class="nav-icon">⟶</span> Prospect Pipeline
+      <span class="nav-badge">12</span>
+    </button>
+    <button class="nav-item" onclick="showPage('intake', this)">
+      <span class="nav-icon">＋</span> New Prospect Intake
+    </button>
+
+    <span class="nav-section-label">Materials</span>
+    <button class="nav-item" onclick="showPage('materials', this)">
+      <span class="nav-icon">◫</span> Material Library
+    </button>
+    <button class="nav-item" onclick="showPage('builder', this)">
+      <span class="nav-icon">⬡</span> Quick Build
+    </button>
+
+    <span class="nav-section-label">Operations</span>
+    <button class="nav-item" onclick="showPage('followups', this)">
+      <span class="nav-icon">◎</span> Follow-Up Queue
+      <span class="nav-badge" style="background:var(--red)">3</span>
+    </button>
+    <button class="nav-item" onclick="showPage('ads', this)">
+      <span class="nav-icon">◈</span> Ad Targeting
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">DN</div>
+      <div class="user-info">
+        <div class="user-name">Dani Harrison</div>
+        <div class="user-role">Founder & CEO</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 id="page-title">Dashboard</h1>
+      <p id="page-sub">Good morning, Dani — here's your pipeline at a glance</p>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="showPage('intake', document.querySelector('[onclick*=intake]'))">＋ Add Prospect</button>
+      <button class="btn btn-primary" onclick="openModal('send-modal')">⚡ Quick Send Material</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card" style="--accent: var(--blue)">
+          <div class="stat-label">Total Prospects</div>
+          <div class="stat-value">24</div>
+          <div class="stat-trend up">↑ 4 this month</div>
+        </div>
+        <div class="stat-card" style="--accent: var(--green)">
+          <div class="stat-label">Active Clients</div>
+          <div class="stat-value">8</div>
+          <div class="stat-trend up">↑ 2 converted</div>
+        </div>
+        <div class="stat-card" style="--accent: var(--amber)">
+          <div class="stat-label">Conversion Rate</div>
+          <div class="stat-value">17%</div>
+          <div class="stat-trend up">↑ from 8–10%</div>
+        </div>
+        <div class="stat-card" style="--accent: var(--red)">
+          <div class="stat-label">Overdue Follow-Ups</div>
+          <div class="stat-value">3</div>
+          <div class="stat-trend down">Action needed</div>
+        </div>
+      </div>
+
+      <div class="pipeline-header">
+        <h2>Pipeline Overview</h2>
+        <button class="btn btn-ghost" onclick="showPage('pipeline', document.querySelector('[onclick*=pipeline]'))">View Full Pipeline →</button>
+      </div>
+
+      <div class="pipeline-board">
+        <div class="pipeline-col">
+          <div class="col-header">
+            <span class="col-title">New Leads</span>
+            <span class="col-count" style="--col-color: var(--blue)">6</span>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--blue)" onclick="openProspect('Apex Growth Partners')">
+            <div class="card-company">Apex Growth Partners</div>
+            <div class="card-contact">Sarah Chen · CFO</div>
+            <div class="card-meta">
+              <span class="card-industry">Financial Services</span>
+              <span class="card-days">2 days ago</span>
+            </div>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--blue)" onclick="openProspect('TerraVolt Energy')">
+            <div class="card-company">TerraVolt Energy</div>
+            <div class="card-contact">Marcus Webb · VP Ops</div>
+            <div class="card-meta">
+              <span class="card-industry">Energy</span>
+              <span class="card-days">4 days ago</span>
+            </div>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--blue)">
+            <div class="card-company">Bridgepoint Tech</div>
+            <div class="card-contact">Lisa Park · CEO</div>
+            <div class="card-meta">
+              <span class="card-industry">Technology</span>
+              <span class="card-days">Today</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-col">
+          <div class="col-header">
+            <span class="col-title">Materials Sent</span>
+            <span class="col-count" style="--col-color: var(--amber)">4</span>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--amber)">
+            <div class="card-company">NovaStar Capital</div>
+            <div class="card-contact">James Okafor · Partner</div>
+            <div class="card-meta">
+              <span class="card-industry">Financial Services</span>
+              <span class="card-days card-urgent">7 days — follow up!</span>
+            </div>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--amber)">
+            <div class="card-company">Skyline Logistics</div>
+            <div class="card-contact">Priya Nair · COO</div>
+            <div class="card-meta">
+              <span class="card-industry">Operations</span>
+              <span class="card-days">3 days ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-col">
+          <div class="col-header">
+            <span class="col-title">In Conversation</span>
+            <span class="col-count" style="--col-color: #8B5CF6">3</span>
+          </div>
+          <div class="prospect-card" style="--card-accent: #8B5CF6">
+            <div class="card-company">Redwood Ventures</div>
+            <div class="card-contact">Tom Heller · MD</div>
+            <div class="card-meta">
+              <span class="card-industry">Technology</span>
+              <span class="card-days">Meeting Thu</span>
+            </div>
+          </div>
+          <div class="prospect-card" style="--card-accent: #8B5CF6">
+            <div class="card-company">PulseHealth Inc</div>
+            <div class="card-contact">Dana Ross · CEO</div>
+            <div class="card-meta">
+              <span class="card-industry">Healthcare</span>
+              <span class="card-days">Proposal stage</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-col">
+          <div class="col-header">
+            <span class="col-title">Converted</span>
+            <span class="col-count" style="--col-color: var(--green)">2</span>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--green)">
+            <div class="card-company">Meridian Advisors</div>
+            <div class="card-contact">Carol Zhang · Partner</div>
+            <div class="card-meta">
+              <span class="card-industry">Financial Services</span>
+              <span class="card-days" style="color:var(--green)">✓ Signed</span>
+            </div>
+          </div>
+          <div class="prospect-card" style="--card-accent: var(--green)">
+            <div class="card-company">Crestwood Manufacturing</div>
+            <div class="card-contact">Bill Santos · CEO</div>
+            <div class="card-meta">
+              <span class="card-industry">Operations</span>
+              <span class="card-days" style="color:var(--green)">✓ Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>Recent Activity</h3>
+              <p>Last 48 hours across all prospects</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="activity-item">
+              <div class="activity-dot" style="--dot-color: var(--green)"></div>
+              <div>
+                <div class="activity-text"><strong>Meridian Advisors</strong> signed engagement agreement</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="--dot-color: var(--blue)"></div>
+              <div>
+                <div class="activity-text">1-pager sent to <strong>Skyline Logistics</strong> — 3 min build time</div>
+                <div class="activity-time">Yesterday, 3:42 PM</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="--dot-color: var(--amber)"></div>
+              <div>
+                <div class="activity-text"><strong>Apex Growth Partners</strong> added via LinkedIn outreach</div>
+                <div class="activity-time">Yesterday, 11:20 AM</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="--dot-color: #8B5CF6"></div>
+              <div>
+                <div class="activity-text">Meeting scheduled with <strong>Redwood Ventures</strong> for Thursday</div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="--dot-color: var(--red)"></div>
+              <div>
+                <div class="activity-text"><strong>NovaStar Capital</strong> — no response in 7 days. Follow up now.</div>
+                <div class="activity-time">7 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>Materials Ready to Send</h3>
+              <p>Click to send instantly to any prospect</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Industry</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>DNH 1-Pager</strong></td>
+                  <td>Universal</td>
+                  <td><span class="status-pill status-ready">Ready</span></td>
+                  <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Client Deck</strong></td>
+                  <td>Universal</td>
+                  <td><span class="status-pill status-ready">Ready</span></td>
+                  <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send</button></td>
+                </tr>
+                <tr>
+                  <td><strong>FinServ Case Study</strong></td>
+                  <td>Financial</td>
+                  <td><span class="status-pill status-draft">Draft</span></td>
+                  <td><button class="mini-btn">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Energy Overview</strong></td>
+                  <td>Energy</td>
+                  <td><span class="status-pill status-building">Building</span></td>
+                  <td><button class="mini-btn">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PIPELINE ── -->
+    <div class="page" id="page-pipeline">
+      <div class="page-title">Prospect Pipeline</div>
+      <div class="page-subtitle">All 12 active prospects tracked in real time</div>
+
+      <div class="tabs">
+        <button class="tab active">All Prospects</button>
+        <button class="tab">Overdue</button>
+        <button class="tab">This Week</button>
+        <button class="tab">Converted</button>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-body" style="padding: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Industry</th>
+                <th>Stage</th>
+                <th>Source</th>
+                <th>Last Touch</th>
+                <th>Next Action</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Apex Growth Partners</strong></td>
+                <td>Sarah Chen</td>
+                <td>Financial Services</td>
+                <td><span class="status-pill status-building">New Lead</span></td>
+                <td>LinkedIn</td>
+                <td>2 days ago</td>
+                <td>Send 1-pager</td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send</button></td>
+              </tr>
+              <tr>
+                <td><strong>TerraVolt Energy</strong></td>
+                <td>Marcus Webb</td>
+                <td>Energy</td>
+                <td><span class="status-pill status-building">New Lead</span></td>
+                <td>Conference</td>
+                <td>4 days ago</td>
+                <td>Send 1-pager</td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send</button></td>
+              </tr>
+              <tr>
+                <td><strong>NovaStar Capital</strong></td>
+                <td>James Okafor</td>
+                <td>Financial Services</td>
+                <td><span class="status-pill status-draft">Sent — Waiting</span></td>
+                <td>LinkedIn</td>
+                <td style="color:var(--red); font-weight:600;">7 days ago !</td>
+                <td>Follow up call</td>
+                <td><button class="mini-btn" style="border-color:var(--red); color:var(--red);">Remind</button></td>
+              </tr>
+              <tr>
+                <td><strong>Skyline Logistics</strong></td>
+                <td>Priya Nair</td>
+                <td>Operations</td>
+                <td><span class="status-pill status-draft">Sent — Waiting</span></td>
+                <td>Referral</td>
+                <td>3 days ago</td>
+                <td>Wait 2 more days</td>
+                <td><button class="mini-btn">View</button></td>
+              </tr>
+              <tr>
+                <td><strong>Redwood Ventures</strong></td>
+                <td>Tom Heller</td>
+                <td>Technology</td>
+                <td><span class="status-pill" style="background:#EDE9FE;color:#6D28D9;">In Conversation</span></td>
+                <td>LinkedIn</td>
+                <td>1 day ago</td>
+                <td>Meeting Thu 2pm</td>
+                <td><button class="mini-btn">Prep</button></td>
+              </tr>
+              <tr>
+                <td><strong>PulseHealth Inc</strong></td>
+                <td>Dana Ross</td>
+                <td>Healthcare</td>
+                <td><span class="status-pill" style="background:#EDE9FE;color:#6D28D9;">In Conversation</span></td>
+                <td>Office Hours</td>
+                <td>2 days ago</td>
+                <td>Send proposal</td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send</button></td>
+              </tr>
+              <tr>
+                <td><strong>Meridian Advisors</strong></td>
+                <td>Carol Zhang</td>
+                <td>Financial Services</td>
+                <td><span class="status-pill status-ready">✓ Converted</span></td>
+                <td>LinkedIn</td>
+                <td>Today</td>
+                <td>Onboarding</td>
+                <td><button class="mini-btn">View</button></td>
+              </tr>
+              <tr>
+                <td><strong>Crestwood Manufacturing</strong></td>
+                <td>Bill Santos</td>
+                <td>Operations</td>
+                <td><span class="status-pill status-ready">✓ Converted</span></td>
+                <td>Referral</td>
+                <td>5 days ago</td>
+                <td>Active client</td>
+                <td><button class="mini-btn">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INTAKE FORM ── -->
+    <div class="page" id="page-intake">
+      <div id="success-banner" class="success-banner">
+        <span class="success-icon">✓</span>
+        <span class="success-text">Prospect added successfully! A follow-up reminder has been set for 48 hours.</span>
+      </div>
+
+      <div class="form-section">
+        <div class="form-hero">
+          <h2>New Prospect Intake</h2>
+          <p>Add a prospect immediately after a first conversation — don't let momentum slip</p>
+        </div>
+        <div class="form-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Company Name *</label>
+              <input type="text" placeholder="e.g. Apex Growth Partners" id="f-company">
+            </div>
+            <div class="form-group">
+              <label>Primary Contact *</label>
+              <input type="text" placeholder="Full name" id="f-contact">
+            </div>
+            <div class="form-group">
+              <label>Title / Role</label>
+              <input type="text" placeholder="e.g. CFO, VP Operations">
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" placeholder="contact@company.com" id="f-email">
+            </div>
+            <div class="form-group">
+              <label>Industry</label>
+              <select id="f-industry">
+                <option value="">Select industry</option>
+                <option>Financial Services</option>
+                <option>Energy</option>
+                <option>Technology</option>
+                <option>Healthcare</option>
+                <option>Operations / Logistics</option>
+                <option>Manufacturing</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Company Size</label>
+              <select>
+                <option value="">Select size</option>
+                <option>Startup (1–20)</option>
+                <option>Small (20–100)</option>
+                <option>Mid-size (100–500)</option>
+                <option>Large (500+)</option>
+                <option>Fortune 50</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>How did we meet?</label>
+              <select>
+                <option value="">Select source</option>
+                <option>LinkedIn</option>
+                <option>Conference / Event</option>
+                <option>Referral</option>
+                <option>Office Hours</option>
+                <option>Inbound</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Funding Status</label>
+              <select>
+                <option value="">Select</option>
+                <option>SBIR Funded</option>
+                <option>Seed Funded</option>
+                <option>Series A+</option>
+                <option>Bootstrapped</option>
+                <option>Government / Grant</option>
+                <option>Unknown</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Materials Requested</label>
+              <div class="checkbox-group" id="materials-group">
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> 1-Pager</label>
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> Client Deck</label>
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> Case Study</label>
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> White Paper</label>
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> Additional Meeting</label>
+                <label class="checkbox-pill" onclick="togglePill(this)"><input type="checkbox"> Proposal</label>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label>Notes from First Conversation</label>
+              <textarea placeholder="Key pain points, priorities, anything they mentioned that's relevant..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-footer">
+          <span class="form-note">⏱ A follow-up reminder will be automatically scheduled for 48 hours</span>
+          <button class="btn btn-primary" onclick="submitIntake()">Add to Pipeline →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MATERIALS ── -->
+    <div class="page" id="page-materials">
+      <div class="page-title">Material Library</div>
+      <div class="page-subtitle">Reusable blocks — assemble a custom deliverable in minutes</div>
+
+      <div class="materials-grid">
+        <div class="material-card">
+          <div class="material-icon">📄</div>
+          <div class="material-name">DNH 1-Pager — Universal</div>
+          <div class="material-desc">Core overview of DNH Consulting's services, approach, and value. Works across all industries. Customizable intro paragraph.</div>
+          <div class="material-status">
+            <span class="status-pill status-ready">Ready to Send</span>
+            <div class="material-actions">
+              <button class="mini-btn">Preview</button>
+              <button class="mini-btn primary" onclick="openModal('send-modal')">Send</button>
+            </div>
+          </div>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">📊</div>
+          <div class="material-name">Client Deck — Universal</div>
+          <div class="material-desc">Full slide deck covering methodology, case studies, and engagement process. 12 slides, industry-agnostic with customizable cover.</div>
+          <div class="material-status">
+            <span class="status-pill status-ready">Ready to Send</span>
+            <div class="material-actions">
+              <button class="mini-btn">Preview</button>
+              <button class="mini-btn primary" onclick="openModal('send-modal')">Send</button>
+            </div>
+          </div>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">🏦</div>
+          <div class="material-name">1-Pager — Financial Services</div>
+          <div class="material-desc">Industry-specific version with financial services language, relevant examples, and sector-specific value propositions.</div>
+          <div class="material-status">
+            <span class="status-pill status-draft">In Draft</span>
+            <div class="material-actions">
+              <button class="mini-btn">Edit</button>
+              <button class="mini-btn">Assign Intern</button>
+            </div>
+          </div>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">⚡</div>
+          <div class="material-name">1-Pager — Energy Sector</div>
+          <div class="material-desc">Tailored for energy companies with relevant operational and strategic language specific to the energy industry.</div>
+          <div class="material-status">
+            <span class="status-pill status-building">Building</span>
+            <div class="material-actions">
+              <button class="mini-btn">View Progress</button>
+            </div>
+          </div>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">💡</div>
+          <div class="material-name">Leadership Development Overview</div>
+          <div class="material-desc">One-page explainer for prospects specifically asking about leadership coaching, staffing plans, and org development.</div>
+          <div class="material-status">
+            <span class="status-pill status-ready">Ready to Send</span>
+            <div class="material-actions">
+              <button class="mini-btn">Preview</button>
+              <button class="mini-btn primary" onclick="openModal('send-modal')">Send</button>
+            </div>
+          </div>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">📝</div>
+          <div class="material-name">Follow-Up Email Template</div>
+          <div class="material-desc">Professional follow-up email with customizable subject lines, auto-fill prospect name, and call-to-action options.</div>
+          <div class="material-status">
+            <span class="status-pill status-ready">Ready to Send</span>
+            <div class="material-actions">
+              <button class="mini-btn">Preview</button>
+              <button class="mini-btn primary" onclick="openModal('send-modal')">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── QUICK BUILD ── -->
+    <div class="page" id="page-builder">
+      <div class="page-title">Quick Build</div>
+      <div class="page-subtitle">Select blocks → assemble a custom deliverable in under 5 minutes</div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head"><div><h3>Step 1 — Select Prospect</h3><p>Who is this for?</p></div></div>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Prospect</label>
+              <select>
+                <option>Apex Growth Partners — Sarah Chen</option>
+                <option>TerraVolt Energy — Marcus Webb</option>
+                <option>NovaStar Capital — James Okafor</option>
+                <option>Redwood Ventures — Tom Heller</option>
+                <option>PulseHealth Inc — Dana Ross</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Document Type</label>
+              <select>
+                <option>1-Pager</option>
+                <option>Full Client Deck</option>
+                <option>Case Study</option>
+                <option>Follow-Up Email</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tone</label>
+              <select>
+                <option>Professional & Concise</option>
+                <option>Warm & Relationship-Focused</option>
+                <option>Data-Driven & Analytical</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h3>Step 2 — Select Blocks</h3><p>Pick the sections to include</p></div></div>
+          <div class="card-body">
+            <div class="checkbox-group" style="flex-direction:column; gap:10px;">
+              <label class="checkbox-pill checked" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox" checked> ✦ DNH Intro & Overview</label>
+              <label class="checkbox-pill checked" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox" checked> ✦ Core Services Summary</label>
+              <label class="checkbox-pill" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox"> ✦ Industry-Specific Language</label>
+              <label class="checkbox-pill checked" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox" checked> ✦ Relevant Experience / Clients</label>
+              <label class="checkbox-pill" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox"> ✦ Leadership Development Section</label>
+              <label class="checkbox-pill checked" onclick="togglePill(this)" style="border-radius:8px; padding:10px 14px;"><input type="checkbox" checked> ✦ Call to Action & Contact Info</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-head">
+          <div><h3>Step 3 — Preview & Send</h3><p>Assembled in seconds — review before sending</p></div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost">Download PDF</button>
+            <button class="btn btn-primary" onclick="openModal('send-modal')">⚡ Send to Prospect</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:28px 32px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--dark);">
+              <div>
+                <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:var(--dark);">DNH Consulting</div>
+                <div style="font-size:11px; color:var(--gray); letter-spacing:2px; text-transform:uppercase; margin-top:2px;">Strategy · Clarity · Results</div>
+              </div>
+              <div style="font-size:11px; color:var(--gray); text-align:right;">Prepared for:<br><strong style="color:var(--dark);">Apex Growth Partners</strong></div>
+            </div>
+            <p style="font-size:13px; color:var(--mid); line-height:1.7; margin-bottom:14px;">DNH Consulting is a boutique strategy firm that helps companies make smarter business decisions by turning complex financial data, market trends, and industry insights into clear, actionable guidance.</p>
+            <p style="font-size:13px; color:var(--mid); line-height:1.7; margin-bottom:14px;">With over 20 years of cross-industry experience — spanning financial services, energy, and technology — we bring a perspective that goes beyond a single sector. Our clients range from Fortune 50 organizations to early-stage startups seeking seed funding.</p>
+            <div style="background:var(--blue-pale); border-left:3px solid var(--blue); padding:12px 16px; border-radius:0 8px 8px 0; font-size:12.5px; color:var(--mid); line-height:1.6;">
+              <strong style="color:var(--dark);">Ready to explore a fit?</strong> Reach out directly at <span style="color:var(--blue);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="284c494641684c46404b47465b5d445c41464f064b4745">[email&#160;protected]</a></span> or book a 30-minute call.
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:12px;">
+            <span style="font-size:12px; color:var(--green); font-weight:500;">✓ Built in 47 seconds</span>
+            <span style="font-size:12px; color:var(--gray);">·</span>
+            <span style="font-size:12px; color:var(--gray);">3 blocks assembled</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOLLOW-UP QUEUE ── -->
+    <div class="page" id="page-followups">
+      <div class="page-title">Follow-Up Queue</div>
+      <div class="page-subtitle">3 prospects need attention today — don't let them go cold</div>
+
+      <div class="stats-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom:24px;">
+        <div class="stat-card" style="--accent:var(--red)">
+          <div class="stat-label">Overdue (7+ days)</div>
+          <div class="stat-value" style="color:var(--red)">1</div>
+          <div class="stat-sub">NovaStar Capital</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--amber)">
+          <div class="stat-label">Due Today</div>
+          <div class="stat-value" style="color:var(--amber)">2</div>
+          <div class="stat-sub">Skyline, TerraVolt</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--blue)">
+          <div class="stat-label">Avg Response Time</div>
+          <div class="stat-value">4h</div>
+          <div class="stat-sub">After material sent</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Action Required</h3><p>Prioritized by urgency</p></div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Prospect</th><th>Last Contact</th><th>Action Needed</th><th>Priority</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>NovaStar Capital</strong><br><span style="font-size:11px;color:var(--gray);">James Okafor · Partner</span></td>
+                <td style="color:var(--red);font-weight:600;">7 days ago</td>
+                <td>Send follow-up email + schedule call</td>
+                <td><span class="status-pill" style="background:#FEE2E2;color:var(--red);">🔴 Urgent</span></td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Follow Up Now</button></td>
+              </tr>
+              <tr>
+                <td><strong>Skyline Logistics</strong><br><span style="font-size:11px;color:var(--gray);">Priya Nair · COO</span></td>
+                <td style="color:var(--amber);font-weight:600;">3 days ago</td>
+                <td>Check in — materials sent 3 days ago</td>
+                <td><span class="status-pill" style="background:#FFF4E6;color:var(--amber);">🟡 Today</span></td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Follow Up</button></td>
+              </tr>
+              <tr>
+                <td><strong>TerraVolt Energy</strong><br><span style="font-size:11px;color:var(--gray);">Marcus Webb · VP Ops</span></td>
+                <td>4 days ago</td>
+                <td>Send 1-pager — still not sent</td>
+                <td><span class="status-pill status-building">🔵 Today</span></td>
+                <td><button class="mini-btn primary" onclick="openModal('send-modal')">Send Material</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AD TARGETING ── -->
+    <div class="page" id="page-ads">
+      <div class="page-title">Ad Targeting</div>
+      <div class="page-subtitle">Reach SBIR-funded and distressed county businesses — audiences ready to buy</div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head"><div><h3>Target Audience 1</h3><p>SBIR-Funded Businesses</p></div></div>
+          <div class="card-body">
+            <div class="info-row"><span class="info-label">Audience Size</span><span class="info-val">~18,000 businesses</span></div>
+            <div class="info-row"><span class="info-label">Budget Needed</span><span class="info-val">$2,500–$3,500</span></div>
+            <div class="info-row"><span class="info-label">Platform</span><span class="info-val">LinkedIn + Google</span></div>
+            <div class="info-row"><span class="info-label">Why They Work</span><span class="info-val">Already funded, need strategy support</span></div>
+            <div class="info-row"><span class="info-label">Status</span><span class="info-val"><span class="status-pill status-draft">Not Started</span></span></div>
+            <div style="margin-top:16px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--gray); margin-bottom:4px;"><span>Setup Progress</span><span>0%</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px; width:100%;">Set Up Campaign</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h3>Target Audience 2</h3><p>Tier 1 Distressed County Businesses</p></div></div>
+          <div class="card-body">
+            <div class="info-row"><span class="info-label">Audience Size</span><span class="info-val">~32,000 businesses</span></div>
+            <div class="info-row"><span class="info-label">Budget Needed</span><span class="info-val">$2,500–$3,500</span></div>
+            <div class="info-row"><span class="info-label">Platform</span><span class="info-val">LinkedIn + Facebook</span></div>
+            <div class="info-row"><span class="info-label">Why They Work</span><span class="info-val">Gov. grants available, actively seeking help</span></div>
+            <div class="info-row"><span class="info-label">Status</span><span class="info-val"><span class="status-pill status-draft">Not Started</span></span></div>
+            <div style="margin-top:16px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--gray); margin-bottom:4px;"><span>Setup Progress</span><span>0%</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px; width:100%;">Set Up Campaign</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Total Budget Allocation</h3><p>Recommended spend from $10–20k budget</p></div></div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>Item</th><th>Purpose</th><th>Estimated Cost</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Paid Interns (2 part-time)</strong></td><td>Material development & writing</td><td>$8,000–$12,000</td><td><span class="status-pill status-draft">To Hire</span></td></tr>
+              <tr><td><strong>Project Management Software</strong></td><td>Pipeline & materials system</td><td>~$1,000/year</td><td><span class="status-pill status-draft">To Purchase</span></td></tr>
+              <tr><td><strong>SBIR Ad Campaign</strong></td><td>LinkedIn + Google targeting</td><td>$2,500–$3,500</td><td><span class="status-pill status-draft">Not Started</span></td></tr>
+              <tr><td><strong>Distressed County Ad Campaign</strong></td><td>LinkedIn + Facebook targeting</td><td>$2,500–$3,500</td><td><span class="status-pill status-draft">Not Started</span></td></tr>
+              <tr><td><strong>Total Estimated</strong></td><td></td><td style="font-weight:700;color:var(--dark);">$14,000–$20,000</td><td><span class="status-pill status-ready">Within Budget</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ── SEND MODAL ── -->
+<div class="modal-overlay" id="send-modal" onclick="closeModal('send-modal', event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>⚡ Quick Send Material</h3>
+      <button class="modal-close" onclick="closeModal('send-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>Send To</label>
+        <select>
+          <option>Apex Growth Partners — Sarah Chen</option>
+          <option>TerraVolt Energy — Marcus Webb</option>
+          <option>NovaStar Capital — James Okafor</option>
+          <option>Skyline Logistics — Priya Nair</option>
+          <option>PulseHealth Inc — Dana Ross</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>Material</label>
+        <select>
+          <option>DNH 1-Pager (Universal)</option>
+          <option>Client Deck (Universal)</option>
+          <option>Leadership Development Overview</option>
+          <option>Follow-Up Email Template</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>Personal Note (optional)</label>
+        <textarea placeholder="Add a short personal message to accompany the material..." style="min-height:65px;"></textarea>
+      </div>
+      <div style="background:var(--blue-pale); border-radius:8px; padding:12px 14px; font-size:12px; color:var(--blue);">
+        ⏱ A follow-up reminder will be automatically set for 3 days after sending
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('send-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="sendMaterial()">Send Now →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROSPECT MODAL ── -->
+<div class="modal-overlay" id="prospect-modal" onclick="closeModal('prospect-modal', event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="prospect-modal-title">Prospect Details</h3>
+      <button class="modal-close" onclick="closeModal('prospect-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-row"><span class="info-label">Company</span><span class="info-val" id="pm-company">—</span></div>
+      <div class="info-row"><span class="info-label">Stage</span><span class="info-val">New Lead</span></div>
+      <div class="info-row"><span class="info-label">Source</span><span class="info-val">LinkedIn</span></div>
+      <div class="info-row"><span class="info-label">Industry</span><span class="info-val">Financial Services</span></div>
+      <div class="info-row"><span class="info-label">Materials Sent</span><span class="info-val">None yet</span></div>
+      <div class="info-row"><span class="info-label">Next Action</span><span class="info-val" style="color:var(--blue);">Send 1-pager</span></div>
+      <button class="btn btn-primary" style="margin-top:18px; width:100%;" onclick="closeModal('prospect-modal'); openModal('send-modal')">⚡ Send Material Now</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const pages = {
+    dashboard: { title: 'Dashboard', sub: 'Good morning, Dani — here\'s your pipeline at a glance' },
+    pipeline:  { title: 'Prospect Pipeline', sub: '12 active prospects tracked in real time' },
+    intake:    { title: 'New Prospect Intake', sub: 'Add a prospect right after a first conversation' },
+    materials: { title: 'Material Library', sub: 'Reusable blocks ready to send in minutes' },
+    builder:   { title: 'Quick Build', sub: 'Assemble a custom deliverable in under 5 minutes' },
+    followups: { title: 'Follow-Up Queue', sub: '3 prospects need attention today' },
+    ads:       { title: 'Ad Targeting', sub: 'Reach SBIR and distressed county businesses' },
+  };
+
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+    document.getElementById('page-title').textContent = pages[id].title;
+    document.getElementById('page-sub').textContent = pages[id].sub;
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('show');
+  }
+
+  function closeModal(id, e) {
+    if (!e || e.target.classList.contains('modal-overlay')) {
+      document.getElementById(id).classList.remove('show');
+    }
+  }
+
+  function openProspect(name) {
+    document.getElementById('pm-company').textContent = name;
+    document.getElementById('prospect-modal-title').textContent = name;
+    openModal('prospect-modal');
+  }
+
+  function togglePill(el) {
+    el.classList.toggle('checked');
+  }
+
+  function submitIntake() {
+    const company = document.getElementById('f-company').value;
+    const contact = document.getElementById('f-contact').value;
+    const email = document.getElementById('f-email').value;
+    if (!company || !contact || !email) {
+      alert('Please fill in Company Name, Contact, and Email.');
+      return;
+    }
+    const banner = document.getElementById('success-banner');
+    banner.querySelector('.success-text').textContent =
+      `${company} (${contact}) added to pipeline! A follow-up reminder has been set for 48 hours.`;
+    banner.classList.add('show');
+    document.getElementById('f-company').value = '';
+    document.getElementById('f-contact').value = '';
+    document.getElementById('f-email').value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => banner.classList.remove('show'), 5000);
+  }
+
+  function sendMaterial() {
+    closeModal('send-modal');
+    setTimeout(() => {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:20px;right:20px;background:#E6F9F2;border:1px solid #A3E4C9;border-radius:10px;padding:14px 20px;font-size:13px;color:#1A9E6A;font-weight:500;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.1);display:flex;align-items:center;gap:10px;';
+      banner.innerHTML = '<sp
